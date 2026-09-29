@@ -1,4 +1,3 @@
-
 pipeline {
 
     agent any
@@ -38,6 +37,15 @@ pipeline {
             }
         }
 
+        stage('Docker Check') {
+            steps {
+                bat 'whoami'
+                bat 'where docker'
+                bat 'docker --version'
+                bat 'docker info'
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 bat 'docker build -t student-management:1.0 .'
@@ -63,7 +71,7 @@ pipeline {
 
                         for (int i = 0; i < retries; i++) {
                             int result = bat(
-                                script: 'curl.exe -s -o NUL -w "%%{http_code}" http://localhost:8081/actuator/health',
+                                script: 'curl.exe -f -s -o NUL http://localhost:8081/actuator/health',
                                 returnStatus: true
                             )
 
