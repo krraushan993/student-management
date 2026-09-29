@@ -37,5 +37,12 @@ pipeline {
                 bat 'docker build -t student-management:1.0 .'
             }
         }
+
+        stage('Check Docker') {
+            steps {
+                bat 'where docker'
+                bat 'docker --version'
+            }
+        }
     }
 }
