@@ -38,10 +38,11 @@ pipeline {
             }
         }
 
-        stage('Check Docker') {
+        stage('Docker Deploy') {
             steps {
-                bat 'where docker'
-                bat 'docker --version'
+                bat 'docker stop student-management-container || exit 0'
+                bat 'docker rm student-management-container || exit 0'
+                bat 'docker run -d -p 8081:8081 --name student-management-container student-management:1.0'
             }
         }
     }
