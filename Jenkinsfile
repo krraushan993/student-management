@@ -38,6 +38,23 @@ pipeline {
             }
         }
 
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-credentials',
+                    usernameVariable: 'DOCKER_USERNAME',
+                    passwordVariable: 'DOCKER_PASSWORD'
+                )]) {
+
+                    bat 'docker login -u %DOCKER_USERNAME% -p %DOCKER_PASSWORD%'
+
+                    bat 'docker tag student-management:1.0 %DOCKER_USERNAME%/student-management:1.0'
+
+                    bat 'docker push %DOCKER_USERNAME%/student-management:1.0'
+                }
+            }
+        }
+
         stage('Docker Deploy') {
             steps {
                 bat 'docker stop student-management-container || exit 0'
