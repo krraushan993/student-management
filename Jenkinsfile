@@ -55,11 +55,11 @@ pipeline {
             }
         }
 
-        stage('Docker Deploy') {
+        stage('Deploy to Kubernetes') {
             steps {
-                bat 'docker stop student-management-container || exit 0'
-                bat 'docker rm student-management-container || exit 0'
-                bat 'docker run -d -p 8081:8081 --name student-management-container student-management:1.0'
+                bat 'kubectl apply -f deployment.yaml'
+                bat 'kubectl apply -f service.yaml'
+                bat 'kubectl rollout status deployment/student-management'
             }
         }
     }
